@@ -24,7 +24,24 @@ A repository of advanced **Power Query (M Code)** scripts used for high-volume d
 </details>
 
 <details>
-<summary><b>2. Dynamic Date Dimension (Standard Template)</b></summary>
+<summary><b>2. PO Range Normalization & TEU Logic</b></summary>
+<br>
+
+> **File:** [PO_Range_and_TEU_Normalizer.pq](./PO_Range_and_TEU_Normalizer.pq)
+>
+> **The Problem:**
+> * **Shorthand Data:** Operations teams entered POs as text ranges (e.g., "10200-05"), which prevented joining against the ERP database.
+> * **Aggregation Errors:** Merging header-level Freight Costs onto line-level items caused the "Sum of Sums" error (inflated costs).
+>
+> **The Solution:**
+> * **Smart Text Expansion:** Developed a custom parsing algorithm that splits delimiters, interprets shorthand suffixes, and generates a dynamic list `{Start..End}` to create atomic rows for every PO.
+> * **Index-Based Grouping:** Utilized `Table.Group` combined with `Table.Sort` to create a local index for each PO. Logic was applied to assign Container Volumes (TEU) and Financial Totals *only* to `Index=1`, ensuring 100% accuracy in downstream Pivot Tables.
+> * **TEU Calculation:** Automated the conversion of container strings (e.g., "40ftHQ") into numerical values (2.25 TEU) for logistics capacity planning.
+
+</details>
+
+<details>
+<summary><b>3. Dynamic Date Dimension (Standard Template)</b></summary>
 <br>
 
 > **File:** *[Coming Soon]*
@@ -38,29 +55,28 @@ A repository of advanced **Power Query (M Code)** scripts used for high-volume d
 
 ## 💡 Technical Highlights & M Code Concepts
 
-* **Defensive Merging:** Specifically handling duplicates in lookup tables before performing `Table.NestedJoin` to ensure data cardinality is preserved.
-* **Duration Logic:** Utilizing `Duration.Days` for precise date math rather than simple subtraction, ensuring robustness across different Excel locale settings.
-* **Functional Logic:** Using `Table.AddColumn` with nested conditional logic to create "computed columns" that act as audit flags.
+* **Defensive Merging:** Handling duplicates in lookup tables before `Table.NestedJoin` to ensure cardinality.
+* **Complex Text Parsing:** Using `Text.Split`, `Text.End`, and list generation syntax `{x..y}` to turn unstructured text strings into structured rows.
+* **Advanced Grouping:** Using `Table.Group` to create localized indexes per transaction ID (`PO_Row_Index`). This technique is critical for handling "Header vs. Line Item" granularity issues within a flat table structure.
 
 ---
 
 ## ⚙️ Engineering Philosophy & AI-Augmented Workflow
 
 This repository demonstrates a **Modern "Hybrid" Development Strategy**.
-In an era where syntax is cheap but logic is expensive, my focus is on **Architectural Design** and **Business Value**. I utilize Large Language Models (LLMs) as a "force multiplier" to accelerate development across my tech stack.
+In an era where syntax is cheap but logic is expensive, my focus is on **Architectural Design** and **Business Value**. I utilize Large Language Models (LLMs) as a "force multiplier" to accelerate development.
 
 ### 🧠 The Division of Labor
 * **Human Architect (Me):**
-    * **Business Logic:** Defining the complex rules (e.g., SLA Date thresholds, Currency Normalization rules).
-    * **System Architecture:** Designing the "Star Schema" data model and determining how tables relate (Fact vs. Dimension).
-    * **Validation:** Reviewing, debugging, and stress-testing all transformations to ensure financial accuracy.
+    * **Business Logic:** Defining the complex rules (e.g., SLA Date thresholds, Header/Line logic, TEU factors).
+    * **System Architecture:** Designing the "Star Schema" data model.
+    * **Validation:** Stress-testing transformations to ensure financial accuracy.
 * **AI Assistant (Tooling):**
     * **Syntax Generation:** Rapidly translating logic into specific, case-sensitive **M Code**.
-    * **Pattern Optimization:** Suggesting more efficient transformation steps (e.g., `Table.Buffer`) for large datasets.
-    * **Boilerplate:** Generating standard header comments and step documentation.
+    * **Pattern Optimization:** Suggesting efficient steps (e.g., removing unused columns early) to optimize memory.
+    * **Boilerplate:** Generating standard header comments and documentation.
 
-### 🛠️ Tech Stack & Methodology
-This workflow allows me to maintain high standards of code quality across multiple domains:
-* **VBA:** used for Event-Driven Automation and Object Model manipulation.
-* **Power Automate (RPA):** used for OS-level orchestration and "Low-Code" integration.
-* **Power Query (M Code):** used for robust ETL data transformation and cleaning steps.
+### 🛠️ Tech Stack
+* **VBA:** Event-Driven Automation and Object Model manipulation.
+* **Power Automate:** OS-level orchestration and API integration.
+* **Power Query (M Code):** ETL data transformation and cleaning.
