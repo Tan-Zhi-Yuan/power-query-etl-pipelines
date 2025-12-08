@@ -41,7 +41,23 @@ A repository of advanced **Power Query (M Code)** scripts used for high-volume d
 </details>
 
 <details>
-<summary><b>3. Dynamic Date Dimension (Standard Template)</b></summary>
+<summary><b>3. Transit Time Analyzer (Click to Expand)</b></summary>
+<br>
+
+> **File:** [Transit_Time_Analysis.pq](./Transit_Time_Analysis.pq)
+>
+> **The Problem:**
+> Logistics data exported from SAP is "Line-Level" (one row per item), making it impossible to calculate average transit times without inflating the data (e.g., a PO with 50 items counts as 50 shipments). Additionally, Port codes were combined with Country codes (e.g., "CNShanghai").
+>
+> **The Solution:**
+> * **Header-Level Deduplication:** Sorts by Line Number and performs a `Table.Distinct` on the PO Number. This collapses multi-line POs into a single "Shipment Event" to ensure accurate averages.
+> * **String Parsing:** Extract the first 2 characters of the departure field to isolate the "Origin Country" and trims the remainder to find the "Origin Port."
+> * **Dynamic Filtering:** Automatically filters for the "Last 6 Months" relative to the current system date, creating a rolling window for trend analysis.
+
+</details>
+
+<details>
+<summary><b>4. Dynamic Date Dimension (Standard Template)</b></summary>
 <br>
 
 > **File:** *[Coming Soon]*
