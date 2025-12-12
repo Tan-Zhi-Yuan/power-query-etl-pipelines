@@ -67,6 +67,22 @@ A repository of advanced **Power Query (M Code)** scripts used for high-volume d
 
 </details>
 
+<details>
+<summary><b>5. Procurement Valuation Report (Click to Expand)</b></summary>
+<br>
+
+> **File:** [Procurement_Valuation_Report.pq](./Procurement_Valuation_Report.pq)
+>
+> **The Problem:**
+> Generating end-of-period inventory valuation reports requires complex merging of purchasing data with separate container-type records and filtering by exact Start/End of Year dates defined by finance.
+>
+> **The Solution:**
+> * **Convenient Dynamic Date Range:** The query dynamically reads the **Start of Year (SOY)** and **End of Year (EOY)** dates from simple configuration tables in the workbook. This allows finance users to control the exact reporting window *without* editing M Code.
+> * **Data De-Duplication:** Uses `Table.Distinct` on the combined `PO Number` and `LineNum` fields to ensure every unique line item is counted exactly once, crucial for accurate valuation totals.
+> * **Relational Merge:** Performs a `Left Outer Join` to bring in container type data (`U_MCS_Container`) from a separate table for richer analysis.
+
+</details>
+
 ---
 
 ## 💡 Technical Highlights & M Code Concepts
