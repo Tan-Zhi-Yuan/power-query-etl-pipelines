@@ -24,7 +24,7 @@ A repository of advanced **Power Query (M Code)** scripts used for high-volume d
 </details>
 
 <details>
-<summary><b>2. PO Range Normalization & TEU Logic</b></summary>
+<summary><b>2. PO Range Normalization & TEU Logic (Click to Expand)</b></summary>
 <br>
 
 > **File:** [PO_Range_and_TEU_Normalizer.pq](./PO_Range_and_TEU_Normalizer.pq)
@@ -57,7 +57,7 @@ A repository of advanced **Power Query (M Code)** scripts used for high-volume d
 </details>
 
 <details>
-<summary><b>4. Dynamic Date Dimension (Standard Template)</b></summary>
+<summary><b>4. Dynamic Date Dimension (Standard Template) (Click to Expand)</b></summary>
 <br>
 
 > **File:** *[Coming Soon]*
@@ -83,9 +83,28 @@ A repository of advanced **Power Query (M Code)** scripts used for high-volume d
 
 </details>
 
+<details>
+<summary><b>6. Dynamic SOH Trend Analyzer (Click to Expand)</b></summary>
+<br>
+
+> **File:** [Dynamic_SOH_Trend_Analysis.pq](./Dynamic_SOH_Trend_Analysis.pq)
+>
+> **The Problem:**
+> Stock-On-Hand (SOH) analysis requires comparing multiple point-in-time snapshots. Standard queries break when column headers change (e.g., "SOH Dec" vs "SOH Jan"). Furthermore, joining purely on "Item Code" causes errors when inventory is distributed across multiple warehouses.
+>
+> **The Solution:**
+> * **Composite Key Joins:** Utilizes a multi-key joining strategy `{"Item Code", "Wh"}` to reconcile stock movements at the specific warehouse level, preventing data duplication.
+> 
+> * **Dynamic Metadata Injection:** Employs custom M functions to scrape date values from a "Helper" table and programmatically inject them into column headers at runtime (e.g., renaming placeholders to `SOH1223`).
+> * **Variance Analytics:** Automatically calculates absolute SOH decrease and percentage variance, applying a significance filter (movements > 1 unit) to isolate actionable inventory depletion trends.
+
+</details>
+
 ---
 
 ## 💡 Technical Highlights & M Code Concepts
+
+* **Composite Key Logic:** Utilizing lists `{"Key1", "Key2"}` within join functions to ensure relational integrity in many-to-many scenarios.
 
 * **Defensive Merging:** Handling duplicates in lookup tables before `Table.NestedJoin` to ensure cardinality.
 * **Complex Text Parsing:** Using `Text.Split`, `Text.End`, and list generation syntax `{x..y}` to turn unstructured text strings into structured rows.
